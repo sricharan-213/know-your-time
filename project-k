@@ -1,0 +1,236 @@
+def is_valid_date(day, month, year):
+    # Checking if month is valid (between 1 and 12)
+    if month < 1 or month > 12:
+        return False
+    
+    # Days in each month (for regular years)
+    days_in_month = {
+        1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30, 
+        7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31
+    }
+    
+    # Checking if the year is a leap year to adjust February days
+    if leap(year):
+        days_in_month[2] = 29  # February has 29 days in a leap year
+    
+    # Check if the day is within the valid range for the given month
+    if day < 1 or day > days_in_month[month]:
+        return False
+    
+    return True
+
+# Function to check if a year is a leap year
+def leap(y):
+    x = y % 4
+    y = y % 400
+    z = y % 100
+    if ((x == 0 and z != 0) or (y == 0)):
+        return True
+    return False
+
+# Function to determine a person's astrology message based on the day
+def astrology(day):
+    if day == "monday":
+        return "Start your week with positivity and confidence. Your efforts will bear fruit today. 🌞"
+    elif day == "tuesday":
+        return "Your energy is strong today. It's a great time to tackle challenges and work hard. 🚀"
+    elif day == "wednesday":
+        return "A perfect day for creativity and problem-solving. Let your imagination guide you. 🎨"
+    elif day == "thursday":
+        return "Your hard work is about to pay off. Stay focused and success will follow. 🌟"
+    elif day == "friday":
+        return "Today is all about relationships. Spend time with loved ones and cherish the moments. ❤"
+    elif day == "saturday":
+        return "Take some time to rest and recharge. It’s a day for self-care and relaxation. 😌"
+    elif day == "sunday":
+        return "Your energy is boundless today. Push forward and make the most of it. 💪"
+    else:
+        return "The stars are shining brightly for you today! ✨"
+
+# Getting user input for dates
+date1 = input("Enter starting date in form dd/mm/yyyy: ").split("/")
+print(date1)
+[d1, m1, y1] = date1
+date2 = input("Enter ending date in form dd/mm/yyyy: ").split("/")
+print(date2)
+[d2, m2, y2] = date2
+
+# Convert inputs to integers
+d1 = int(d1)
+d2 = int(d2)
+m1 = int(m1)
+m2 = int(m2)
+y1 = int(y1)
+y2 = int(y2)
+
+# Check if both the entered dates are valid
+if not is_valid_date(d1, m1, y1):
+    print("The starting date is invalid!")
+else:
+    print("The starting date is valid. 😊")
+
+if not is_valid_date(d2, m2, y2):
+    print("The ending date is invalid!")
+else:
+    print("The ending date is valid. 😊")
+
+# Days of the week
+w = ["saturday", "sunday", "monday", "tuesday", "wednesday", "thursday", "friday"]
+l = []
+k = 0
+
+# Boolean to track if astrology has been shown for the first birthday
+first_birthday_astrology = True
+
+# Calculate birthdays' day of the week for each year in the range
+for i in range(y1, y2):
+    if m1 != 1 and m1 != 2:
+        h = (d1 + (((13)*(m1 + 1)) // 5) + (i % 100) + ((i % 100) // 4) + ((i // 100) // 4) - 2 * (i // 100)) % 7
+        print("Your ", str(k), " birthday is on", w[h])
+        if first_birthday_astrology:
+            print(astrology(w[h]))  # Astrology message only for the first birthday
+            first_birthday_astrology = False  # Prevent astrology message from repeating
+        l.append(w[h])
+        k += 1
+    else:
+        h = (d1 + (((13)*(m1 + 1 + 12)) // 5) + (i % 100) + ((i % 100) // 4) + ((i // 100) // 4) - 2 * (i // 100)) % 7
+        print("Your", str(k) + "th birthday is on ", w[h])
+        if first_birthday_astrology:
+            print(astrology(w[h]))  # Astrology message only for the first birthday
+            first_birthday_astrology = False  # Prevent astrology message from repeating
+        l.append(w[h])
+        k += 1
+
+if m2 != 1 and m2 != 2:
+    h = (d2 + (((13)*(m2 + 1)) // 5) + (y2 % 100) + ((y2 % 100) // 4) + ((y2 // 100) // 4) - 2 * (y2 // 100)) % 7
+    print("The entered second date is", w[h])
+else:
+    h = (d2 + (((13)*(m2 + 1 + 12)) // 5) + (y2 % 100) + ((y2 % 100) // 4) + ((y2 // 100) // 4) - 2 * (y2 // 100)) % 7
+    print("The entered second date is", w[h])
+
+# Most frequent birthday day
+print("Day on which most of your birthdays fall: ", max(set(l), key=l.count))
+
+# Calculate total days lived based on leap years and non-leap years
+m31 = [1, 3, 5, 7, 8, 10, 12]
+m30 = [4, 6, 9, 11]
+l = 0
+n = 0
+
+for i in range(y1 + 1, y2):
+    if leap(i):
+        l += 1
+    else:
+        n += 1
+
+l *= 366  # No of leap days between two years
+n *= 365  # No of non-leap days between two years
+
+if m1 in m31:
+    if m1 > 2:
+        if m1 == 3:
+            u = (31 - d1) + 275
+        if m1 == 5:
+            u = (31 - d1) + 214
+        if m1 == 7:
+            u = (31 - d1) + 153
+        if m1 == 8:
+            u = (31 - d1) + 92
+        if m1 == 10:
+            u = (31 - d1) + 61
+        if m1 == 12:
+            u = (31 - d1)
+    else:
+        if leap(y1):
+            u = (31 - d1) + 335
+        else:
+            u = (30 - d1) + 335
+
+if m1 in m30:
+    if m1 == 4:
+        u = (30 - d1) + 245
+    if m1 == 6:
+        u = (30 - d1) + 184
+    if m1 == 9:
+        u = (30 - d1) + 92
+    if m1 == 11:
+        u = (30 - d1) + 31
+
+if m1 == 2:
+    if leap(y1):
+        u = (29 - d1) + 306
+    else:
+        u = (29 - d1) + 305
+
+if m2 in m31:
+    if m2 > 2:
+        if leap(y2):
+            if m2 == 3:
+                j = d2 + 60
+            if m2 == 5:
+                j = d2 + 121
+            if m2 == 7:
+                j = d2 + 182
+            if m2 == 8:
+                j = d2 + 213
+            if m2 == 10:
+                j = d2 + 274
+            if m2 == 12:
+                j = d2 + 335
+        else:
+            if m2 == 3:
+                j = d2 + 59
+            if m2 == 5:
+                j = d2 + 120
+            if m2 == 7:
+                j = d2 + 181
+            if m2 == 8:
+                j = d2 + 212
+            if m2 == 10:
+                j = d2 + 273
+            if m2 == 12:
+                j = d2 + 334
+    else:
+        j = d2
+
+if m2 in m30:
+    if leap(y2):
+        if m2 == 4:
+            j = d2 + 91
+        if m2 == 6:
+            j = d2 + 152
+        if m2 == 9:
+            j = d2 + 254
+        if m2 == 11:
+            j = d2 + 315
+    else:
+        if m2 == 4:
+            j = d2 + 90
+        if m2 == 6:
+            j = d2 + 151
+        if m2 == 9:
+            j = d2 + 253
+        if m2 == 11:
+            j = d2 + 313
+
+if m2 == 2:
+    j = 31 + d2
+
+# Calculate total lived time
+if y1 != y2:
+    t = l + n + u + j
+else:
+    if leap(y1):
+        t = l + n + (u - (366 - j))
+    else:
+        t = l + n + (u - (365 - j))
+
+# Time in hours, minutes, and seconds
+n_hours = t * 24
+n_min = n_hours * 60
+n_sec = n_min * 60
+
+print("Total number of days lived:", t)
+print("YOU HAVE LIVED FOR", n_hours, "HOURS")
+print("YOU HAVE LIVED FOR", n_min, "MINUTES")
+print("YOU HAVE LIVED FOR", n_sec, "SECONDS")
